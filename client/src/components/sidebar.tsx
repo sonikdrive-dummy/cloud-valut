@@ -1,4 +1,4 @@
-import { Folder, Clock, Share2, Star, Trash2, CreditCard, User as UserIcon, Settings, Cloud, Zap } from "lucide-react";
+import { Folder, Clock, Share2, Star, Trash2, CreditCard, User as UserIcon, Settings, Cloud, Zap, Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Link, useLocation } from "wouter";
@@ -81,6 +81,63 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
               );
             })}
           </nav>
+
+          {/* Notifications */}
+          <div className="space-y-3">
+            <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
+              Notifications
+            </h3>
+            <div className="space-y-2">
+              <div className="p-3 bg-secondary rounded-lg border-l-4 border-primary">
+                <div className="flex items-start space-x-3">
+                  <Bell className="h-4 w-4 text-primary mt-0.5" />
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-foreground">
+                      File shared
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      Sarah shared "Project_Document.pdf" with you
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      2 minutes ago
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="p-3 bg-secondary rounded-lg">
+                <div className="flex items-start space-x-3">
+                  <Bell className="h-4 w-4 text-muted-foreground mt-0.5" />
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-foreground">
+                      Storage warning
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      You're using 80% of your storage space
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      1 hour ago
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="p-3 bg-secondary rounded-lg">
+                <div className="flex items-start space-x-3">
+                  <Bell className="h-4 w-4 text-muted-foreground mt-0.5" />
+                  <div className="flex-1">
+                    <p className="text-sm font-medium text-foreground">
+                      File uploaded
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      "Q4_Report.pdf" uploaded successfully
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-1">
+                      Yesterday
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
 
           {/* Quick Actions */}
           <div className="space-y-3">
