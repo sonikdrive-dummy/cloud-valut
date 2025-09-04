@@ -112,7 +112,7 @@ export default function ProfilePage() {
       <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
       <main className="flex-1 md:ml-64 p-6 pt-24">
-        <div className="max-w-4xl">
+        <div className="w-full">
           <div className="mb-8">
             <h2 className="text-3xl font-bold text-foreground mb-2" data-testid="text-page-title">
               Profile Settings
