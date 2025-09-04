@@ -12,6 +12,7 @@ import RecentPage from "@/pages/recent";
 import SharedPage from "@/pages/shared";
 import StarredPage from "@/pages/starred";
 import TrashPage from "@/pages/trash";
+import NotificationsPage from "@/pages/notifications";
 
 function Router() {
   return (
@@ -21,6 +22,7 @@ function Router() {
       <Route path="/recent" component={RecentPage} />
       <Route path="/shared" component={SharedPage} />
       <Route path="/starred" component={StarredPage} />
+      <Route path="/notifications" component={NotificationsPage} />
       <Route path="/trash" component={TrashPage} />
       <Route path="/profile" component={ProfilePage} />
       <Route path="/subscription" component={SubscriptionPage} />

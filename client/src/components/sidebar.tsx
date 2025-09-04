@@ -1,4 +1,4 @@
-import { Folder, Clock, Share2, Star, Trash2, CreditCard, User as UserIcon, Settings, Cloud, Zap } from "lucide-react";
+import { Folder, Clock, Share2, Star, Trash2, CreditCard, User as UserIcon, Settings, Cloud, Zap, Bell } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Link, useLocation } from "wouter";
@@ -32,6 +32,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
     { href: "/recent", icon: Clock, label: "Recent", testId: "link-recent" },
     { href: "/shared", icon: Share2, label: "Shared", testId: "link-shared" },
     { href: "/starred", icon: Star, label: "Starred", testId: "link-starred" },
+    { href: "/notifications", icon: Bell, label: "Notifications", testId: "link-notifications" },
     { href: "/trash", icon: Trash2, label: "Trash", testId: "link-trash" },
   ];
 
