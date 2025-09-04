@@ -1,10 +1,9 @@
-import { Search, Sun, Moon, Menu } from "lucide-react";
+import { Search, Bell, Sun, Moon, Menu } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useTheme } from "./theme-provider";
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useLocation } from "wouter";
 import type { User } from "@shared/schema";
 
 interface TopNavigationProps {
@@ -15,7 +14,6 @@ interface TopNavigationProps {
 
 export function TopNavigation({ onSidebarToggle, searchQuery, onSearchChange }: TopNavigationProps) {
   const { theme, toggleTheme } = useTheme();
-  const [, setLocation] = useLocation();
 
   const { data: user } = useQuery<User>({
     queryKey: ["/api/user"],
@@ -69,6 +67,16 @@ export function TopNavigation({ onSidebarToggle, searchQuery, onSearchChange }: 
             <Moon className="h-5 w-5" />
           )}
         </Button>
+        
+        <Button
+          variant="ghost"
+          size="icon"
+          className="hover:bg-white/10 relative"
+          data-testid="button-notifications"
+        >
+          <Bell className="h-5 w-5" />
+          <span className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
+        </Button>
 
         <div className="flex items-center space-x-3">
           <div className="text-right hidden sm:block">
@@ -83,7 +91,6 @@ export function TopNavigation({ onSidebarToggle, searchQuery, onSearchChange }: 
             src={user?.avatar || "https://pixabay.com/get/gd156c6bf101554ad4843adef61c41f30a6bf07d02066747b4690bcb8f6fc58056be6f6881f001a724ea57dff1f9476ecd659b16204239e0c7bff898ea22abf71_1280.jpg"}
             alt="Profile picture" 
             className="w-10 h-10 rounded-full border-2 border-white/20 cursor-pointer hover:border-primary transition-colors"
-            onClick={() => setLocation("/profile")}
             data-testid="img-user-avatar"
           />
         </div>
