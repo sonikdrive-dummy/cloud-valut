@@ -25,7 +25,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + " " + sizes[i];
   };
 
-  const storagePercentage = user ? (user.storageUsed / user.storageLimit) * 100 : 0;
+  const storagePercentage = user ? ((user.storageUsed || 0) / (user.storageLimit || 1)) * 100 : 0;
 
   const navigationItems = [
     { href: "/files", icon: Folder, label: "My Files", testId: "link-files" },
@@ -52,7 +52,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
       )}
       
       <aside 
-        className={`glass w-64 h-screen fixed left-0 top-16 z-40 transition-transform duration-300 flex flex-col ${
+        className={`glass w-64 fixed left-0 top-16 bottom-0 z-40 transition-transform duration-300 flex flex-col ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         } md:translate-x-0`}
         data-testid="sidebar"
@@ -126,7 +126,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
             <div className="flex justify-between text-sm">
               <span className="text-foreground">Storage</span>
               <span className="text-muted-foreground" data-testid="text-storage-used">
-                {user ? `${formatBytes(user.storageUsed)} of ${formatBytes(user.storageLimit)}` : "Loading..."}
+                {user ? `${formatBytes(user.storageUsed || 0)} of ${formatBytes(user.storageLimit || 0)}` : "Loading..."}
               </span>
             </div>
             <Progress value={storagePercentage} className="h-2" data-testid="progress-storage" />

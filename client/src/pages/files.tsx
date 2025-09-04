@@ -23,14 +23,18 @@ export default function FilesPage() {
   const { toast } = useToast();
   const { createFolder, uploadFile } = useFileOperations();
 
-  const { data: files = [], isLoading } = useQuery<File[]>({
+  const { data: files = [], isLoading, error } = useQuery<File[]>({
     queryKey: ["/api/files", { parentId: currentParent }],
     queryFn: async () => {
-      const response = await fetch(`/api/files?parentId=${currentParent || 'null'}`);
+      const parentParam = currentParent === null ? 'null' : currentParent;
+      const response = await fetch(`/api/files?parentId=${parentParam}`);
       if (!response.ok) throw new Error('Failed to fetch files');
       return response.json();
     },
   });
+
+  // Debug logging
+  console.log('Files query state:', { files, isLoading, error, currentParent });
 
   const { data: searchResults = [] } = useQuery<File[]>({
     queryKey: ["/api/files/search", { q: searchQuery }],
