@@ -25,6 +25,11 @@ export default function FilesPage() {
 
   const { data: files = [], isLoading } = useQuery<File[]>({
     queryKey: ["/api/files", { parentId: currentParent }],
+    queryFn: async () => {
+      const response = await fetch(`/api/files?parentId=${currentParent || 'null'}`);
+      if (!response.ok) throw new Error('Failed to fetch files');
+      return response.json();
+    },
   });
 
   const { data: searchResults = [] } = useQuery<File[]>({

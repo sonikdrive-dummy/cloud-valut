@@ -1,4 +1,4 @@
-import { Folder, Clock, Share2, Star, Trash2, CreditCard, User as UserIcon, Settings, Cloud } from "lucide-react";
+import { Folder, Clock, Share2, Star, Trash2, CreditCard, User as UserIcon, Settings, Cloud, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Link, useLocation } from "wouter";
@@ -52,28 +52,12 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
       )}
       
       <aside 
-        className={`glass w-64 h-screen p-6 fixed left-0 top-16 z-40 transition-transform duration-300 ${
+        className={`glass w-64 h-screen fixed left-0 top-16 z-40 transition-transform duration-300 flex flex-col ${
           isOpen ? "translate-x-0" : "-translate-x-full"
         } md:translate-x-0`}
         data-testid="sidebar"
       >
-        <div className="space-y-6">
-          {/* Storage Overview */}
-          <div className="space-y-4">
-            <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wider">
-              Storage
-            </h3>
-            <div className="space-y-3">
-              <div className="flex justify-between text-sm">
-                <span className="text-foreground">Used</span>
-                <span className="text-muted-foreground" data-testid="text-storage-used">
-                  {user ? `${formatBytes(user.storageUsed)} of ${formatBytes(user.storageLimit)}` : "Loading..."}
-                </span>
-              </div>
-              <Progress value={storagePercentage} className="h-2" data-testid="progress-storage" />
-            </div>
-          </div>
-
+        <div className="flex-1 p-6 space-y-6">
           {/* Navigation */}
           <nav className="space-y-2">
             {navigationItems.map((item) => {
@@ -134,6 +118,31 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
               </Button>
             </div>
           </div>
+        </div>
+
+        {/* Storage Overview - Bottom */}
+        <div className="p-6 border-t border-border space-y-4">
+          <div className="space-y-3">
+            <div className="flex justify-between text-sm">
+              <span className="text-foreground">Storage</span>
+              <span className="text-muted-foreground" data-testid="text-storage-used">
+                {user ? `${formatBytes(user.storageUsed)} of ${formatBytes(user.storageLimit)}` : "Loading..."}
+              </span>
+            </div>
+            <Progress value={storagePercentage} className="h-2" data-testid="progress-storage" />
+          </div>
+          
+          {/* Upgrade Plan Button */}
+          <Link href="/subscription">
+            <Button 
+              className="w-full bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-white border-0 shadow-lg"
+              onClick={() => onClose()}
+              data-testid="button-upgrade-plan"
+            >
+              <Zap className="h-4 w-4 mr-2" />
+              Upgrade Plan
+            </Button>
+          </Link>
         </div>
       </aside>
     </>
