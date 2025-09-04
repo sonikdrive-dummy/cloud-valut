@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { TopNavigation } from "@/components/top-navigation";
 import { Sidebar } from "@/components/sidebar";
@@ -17,6 +17,8 @@ export default function FilesPage() {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [selectedFiles, setSelectedFiles] = useState<Set<string>>(new Set());
   const [currentParent, setCurrentParent] = useState<string | null>(null);
+  const [showDropOverlay, setShowDropOverlay] = useState(false);
+  const [dragCounter, setDragCounter] = useState(0);
   
   const { toast } = useToast();
   const { createFolder, uploadFile } = useFileOperations();
@@ -116,6 +118,62 @@ export default function FilesPage() {
     });
   };
 
+  // Global drag and drop handlers
+  const handleDragEnter = useCallback((e: DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (e.dataTransfer?.types?.includes('Files')) {
+      setDragCounter(prev => prev + 1);
+      setShowDropOverlay(true);
+    }
+  }, []);
+
+  const handleDragLeave = useCallback((e: DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    setDragCounter(prev => {
+      const newCounter = prev - 1;
+      if (newCounter <= 0) {
+        setShowDropOverlay(false);
+      }
+      return newCounter;
+    });
+  }, []);
+
+  const handleDragOver = useCallback((e: DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+  }, []);
+
+  const handleDrop = useCallback((e: DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    setShowDropOverlay(false);
+    setDragCounter(0);
+    
+    const files = e.dataTransfer?.files;
+    if (files && files.length > 0) {
+      handleFileUpload(files);
+    }
+  }, []);
+
+  useEffect(() => {
+    document.addEventListener('dragenter', handleDragEnter);
+    document.addEventListener('dragleave', handleDragLeave);
+    document.addEventListener('dragover', handleDragOver);
+    document.addEventListener('drop', handleDrop);
+
+    return () => {
+      document.removeEventListener('dragenter', handleDragEnter);
+      document.removeEventListener('dragleave', handleDragLeave);
+      document.removeEventListener('dragover', handleDragOver);
+      document.removeEventListener('drop', handleDrop);
+    };
+  }, [handleDragEnter, handleDragLeave, handleDragOver, handleDrop]);
+
   const breadcrumbs = [
     { label: "Home", onClick: () => setCurrentParent(null) }
   ];
@@ -196,6 +254,18 @@ export default function FilesPage() {
 
               <Button
                 variant="secondary"
+                onClick={() => {
+                  const input = document.createElement("input");
+                  input.type = "file";
+                  input.multiple = true;
+                  input.onchange = (e) => {
+                    const files = (e.target as HTMLInputElement).files;
+                    if (files && files.length > 0) {
+                      handleFileUpload(files);
+                    }
+                  };
+                  input.click();
+                }}
                 data-testid="button-upload"
               >
                 <Upload className="h-4 w-4 mr-2" />
@@ -242,8 +312,22 @@ export default function FilesPage() {
           </div>
         </div>
 
-        {/* Upload Area */}
-        <UploadArea onFileSelect={handleFileUpload} />
+        {/* Drop Overlay - only shown when dragging files */}
+        {showDropOverlay && (
+          <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center">
+            <div className="glass rounded-xl p-12 text-center max-w-md mx-4">
+              <div className="w-24 h-24 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Upload className="h-12 w-12 text-primary animate-bounce" />
+              </div>
+              <h3 className="text-2xl font-semibold text-foreground mb-3">
+                Drop your files here
+              </h3>
+              <p className="text-muted-foreground">
+                Release to upload files to your storage
+              </p>
+            </div>
+          </div>
+        )}
 
         {/* Files Grid */}
         {isLoading ? (

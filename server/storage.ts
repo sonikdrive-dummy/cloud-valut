@@ -61,7 +61,7 @@ export class MemStorage implements IStorage {
       storageUsed: 2577891328, // 2.4 GB
       storageLimit: 5368709120, // 5 GB
       preferences: {
-        theme: "dark",
+        theme: "light",
         emailNotifications: true,
         desktopNotifications: false
       },
@@ -121,6 +121,40 @@ export class MemStorage implements IStorage {
         metadata: { fileCount: 156 },
         createdAt: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000),
         updatedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000),
+      },
+      {
+        id: "folder-4",
+        name: "Project Documents",
+        type: "folder",
+        mimeType: null,
+        size: 0,
+        path: "/Project Documents",
+        parentId: null,
+        ownerId: demoUser.id,
+        isStarred: false,
+        isShared: false,
+        isDeleted: false,
+        thumbnail: null,
+        metadata: { fileCount: 8 },
+        createdAt: new Date(Date.now() - 21 * 24 * 60 * 60 * 1000),
+        updatedAt: new Date(Date.now() - 4 * 24 * 60 * 60 * 1000),
+      },
+      {
+        id: "folder-5",
+        name: "Client Files",
+        type: "folder",
+        mimeType: null,
+        size: 0,
+        path: "/Client Files",
+        parentId: null,
+        ownerId: demoUser.id,
+        isStarred: true,
+        isShared: true,
+        isDeleted: false,
+        thumbnail: null,
+        metadata: { fileCount: 42 },
+        createdAt: new Date(Date.now() - 45 * 24 * 60 * 60 * 1000),
+        updatedAt: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000),
       }
     ];
 
@@ -210,6 +244,93 @@ export class MemStorage implements IStorage {
         metadata: {},
         createdAt: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000),
         updatedAt: new Date(Date.now() - 6 * 24 * 60 * 60 * 1000),
+      },
+      // Root level files
+      {
+        id: "file-6",
+        name: "Meeting_Notes.md",
+        type: "file",
+        mimeType: "text/markdown",
+        size: 2847, // 2.8 KB
+        path: "/Meeting_Notes.md",
+        parentId: null,
+        ownerId: demoUser.id,
+        isStarred: true,
+        isShared: false,
+        isDeleted: false,
+        thumbnail: null,
+        metadata: {},
+        createdAt: new Date(Date.now() - 8 * 60 * 60 * 1000),
+        updatedAt: new Date(Date.now() - 8 * 60 * 60 * 1000),
+      },
+      {
+        id: "file-7",
+        name: "Team_Photo.jpg",
+        type: "file",
+        mimeType: "image/jpeg",
+        size: 5421896, // 5.2 MB
+        path: "/Team_Photo.jpg",
+        parentId: null,
+        ownerId: demoUser.id,
+        isStarred: false,
+        isShared: true,
+        isDeleted: false,
+        thumbnail: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?ixlib=rb-4.0.3&auto=format&fit=crop&w=48&h=48",
+        metadata: {},
+        createdAt: new Date(Date.now() - 12 * 60 * 60 * 1000),
+        updatedAt: new Date(Date.now() - 12 * 60 * 60 * 1000),
+      },
+      {
+        id: "file-8",
+        name: "Company_Logo.svg",
+        type: "file",
+        mimeType: "image/svg+xml",
+        size: 18743, // 18 KB
+        path: "/Company_Logo.svg",
+        parentId: null,
+        ownerId: demoUser.id,
+        isStarred: true,
+        isShared: false,
+        isDeleted: false,
+        thumbnail: null,
+        metadata: {},
+        createdAt: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000),
+        updatedAt: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000),
+      },
+      // Additional files in folders
+      {
+        id: "file-9",
+        name: "Contract_Template.docx",
+        type: "file",
+        mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        size: 1456789, // 1.4 MB
+        path: "/Project Documents/Contract_Template.docx",
+        parentId: "folder-4",
+        ownerId: demoUser.id,
+        isStarred: false,
+        isShared: false,
+        isDeleted: false,
+        thumbnail: null,
+        metadata: {},
+        createdAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000),
+        updatedAt: new Date(Date.now() - 10 * 24 * 60 * 60 * 1000),
+      },
+      {
+        id: "file-10",
+        name: "Brand_Guidelines.pdf",
+        type: "file",
+        mimeType: "application/pdf",
+        size: 8923456, // 8.5 MB
+        path: "/Design Assets/Brand_Guidelines.pdf",
+        parentId: "folder-3",
+        ownerId: demoUser.id,
+        isStarred: false,
+        isShared: true,
+        isDeleted: false,
+        thumbnail: null,
+        metadata: {},
+        createdAt: new Date(Date.now() - 18 * 24 * 60 * 60 * 1000),
+        updatedAt: new Date(Date.now() - 18 * 24 * 60 * 60 * 1000),
       }
     ];
 
@@ -237,7 +358,7 @@ export class MemStorage implements IStorage {
       plan: insertUser.plan || "free",
       storageUsed: insertUser.storageUsed || 0,
       storageLimit: insertUser.storageLimit || 5368709120,
-      preferences: insertUser.preferences || { theme: "dark", emailNotifications: true, desktopNotifications: false },
+      preferences: insertUser.preferences || { theme: "light", emailNotifications: true, desktopNotifications: false },
       createdAt: new Date(),
     };
     this.users.set(id, user);
