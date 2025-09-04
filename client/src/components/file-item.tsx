@@ -1,5 +1,6 @@
 import { MoreHorizontal, Star, Share2, Trash2, FolderOpen, Download, Copy, Move } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator } from "@/components/ui/dropdown-menu";
 import { formatDistanceToNow } from "date-fns";
 import { getFileIcon, formatFileSize } from "@/lib/file-utils";
@@ -46,6 +47,13 @@ export function FileItem({
         onClick={handleClick}
         data-testid={`item-${file.type}-${file.id}`}
       >
+        <div className="flex-shrink-0">
+          <Checkbox
+            checked={isSelected}
+            onCheckedChange={(checked) => onSelect(!!checked)}
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
         <div className="flex-shrink-0">
           {file.type === "folder" ? (
             <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
@@ -146,13 +154,21 @@ export function FileItem({
 
   return (
     <div 
-      className={`glass rounded-xl p-4 hover:bg-white/20 transition-all cursor-pointer group ${
+      className={`glass rounded-xl p-4 hover:bg-white/20 transition-all cursor-pointer group relative ${
         isSelected ? "ring-2 ring-primary" : ""
       }`}
       onClick={handleClick}
       data-testid={`item-${file.type}-${file.id}`}
     >
       <div className="flex items-start justify-between mb-3">
+        <div className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity">
+          <Checkbox
+            checked={isSelected}
+            onCheckedChange={(checked) => onSelect(!!checked)}
+            onClick={(e) => e.stopPropagation()}
+            className="bg-white/90 border-gray-300"
+          />
+        </div>
         <div className="w-12 h-12 rounded-lg flex items-center justify-center">
           {file.type === "folder" ? (
             <div className="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center">

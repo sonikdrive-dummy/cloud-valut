@@ -17,6 +17,8 @@ export default function FilesPage() {
   const [viewMode, setViewMode] = useState<"grid" | "list">("grid");
   const [selectedFiles, setSelectedFiles] = useState<Set<string>>(new Set());
   const [currentParent, setCurrentParent] = useState<string | null>(null);
+  const [currentFolder, setCurrentFolder] = useState<File | null>(null);
+  const [breadcrumbPath, setBreadcrumbPath] = useState<{id: string | null, name: string, path: string}[]>([{id: null, name: 'Home', path: '/'}]);
   const [showDropOverlay, setShowDropOverlay] = useState(false);
   const [dragCounter, setDragCounter] = useState(0);
   
@@ -33,8 +35,6 @@ export default function FilesPage() {
     },
   });
 
-  // Debug logging
-  console.log('Files query state:', { files, isLoading, error, currentParent });
 
   const { data: searchResults = [] } = useQuery<File[]>({
     queryKey: ["/api/files/search", { q: searchQuery }],
@@ -61,7 +61,12 @@ export default function FilesPage() {
   const handleFileOpen = (file: File) => {
     if (file.type === "folder") {
       setCurrentParent(file.id);
+      setCurrentFolder(file);
       setSelectedFiles(new Set());
+      
+      // Update breadcrumb path
+      const newPath = [...breadcrumbPath, { id: file.id, name: file.name, path: file.path }];
+      setBreadcrumbPath(newPath);
     } else {
       // TODO: Implement file preview/download
       toast({
@@ -69,6 +74,14 @@ export default function FilesPage() {
         description: `Opening ${file.name}`,
       });
     }
+  };
+
+  const handleBreadcrumbClick = (index: number) => {
+    const targetBreadcrumb = breadcrumbPath[index];
+    setCurrentParent(targetBreadcrumb.id);
+    setCurrentFolder(targetBreadcrumb.id ? { id: targetBreadcrumb.id, name: targetBreadcrumb.name } as File : null);
+    setBreadcrumbPath(breadcrumbPath.slice(0, index + 1));
+    setSelectedFiles(new Set());
   };
 
   const handleCreateFolder = async () => {
@@ -183,9 +196,6 @@ export default function FilesPage() {
     };
   }, [handleDragEnter, handleDragLeave, handleDragOver, handleDrop]);
 
-  const breadcrumbs = [
-    { label: "Home", onClick: () => setCurrentParent(null) }
-  ];
 
   return (
     <div className="min-h-screen bg-gradient-dark">
@@ -207,21 +217,21 @@ export default function FilesPage() {
             {/* Breadcrumb */}
             <Breadcrumb>
               <BreadcrumbList>
-                {breadcrumbs.map((crumb, index) => (
+                {breadcrumbPath.map((crumb, index) => (
                   <BreadcrumbItem key={index}>
-                    {index === breadcrumbs.length - 1 ? (
+                    {index === breadcrumbPath.length - 1 ? (
                       <BreadcrumbPage className="text-foreground font-medium">
-                        {crumb.label}
+                        {crumb.name}
                       </BreadcrumbPage>
                     ) : (
                       <>
                         <Button 
                           variant="link" 
                           className="text-primary hover:text-primary/80 font-medium p-0"
-                          onClick={crumb.onClick}
-                          data-testid={`breadcrumb-${crumb.label.toLowerCase()}`}
+                          onClick={() => handleBreadcrumbClick(index)}
+                          data-testid={`breadcrumb-${crumb.name.toLowerCase()}`}
                         >
-                          {crumb.label}
+                          {crumb.name}
                         </Button>
                         <BreadcrumbSeparator />
                       </>
