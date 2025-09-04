@@ -39,6 +39,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
   const quickActions = [
     { href: "/subscription", icon: CreditCard, label: "Subscription", testId: "link-subscription" },
     { href: "/profile", icon: UserIcon, label: "Profile", testId: "link-profile" },
+    { href: "/sessions", icon: Settings, label: "Sessions", testId: "link-sessions" },
   ];
 
   return (

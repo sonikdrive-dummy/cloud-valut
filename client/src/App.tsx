@@ -13,6 +13,7 @@ import SharedPage from "@/pages/shared";
 import StarredPage from "@/pages/starred";
 import TrashPage from "@/pages/trash";
 import NotificationsPage from "@/pages/notifications";
+import SessionsPage from "@/pages/sessions";
 
 function Router() {
   return (
@@ -26,6 +27,7 @@ function Router() {
       <Route path="/trash" component={TrashPage} />
       <Route path="/profile" component={ProfilePage} />
       <Route path="/subscription" component={SubscriptionPage} />
+      <Route path="/sessions" component={SessionsPage} />
       <Route component={NotFound} />
     </Switch>
   );
