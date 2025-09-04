@@ -121,28 +121,32 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
         </div>
 
         {/* Storage Overview - Bottom */}
-        <div className="p-6 border-t border-border space-y-4">
-          <div className="space-y-3">
-            <div className="flex justify-between text-sm">
-              <span className="text-foreground">Storage</span>
-              <span className="text-muted-foreground" data-testid="text-storage-used">
-                {user ? `${formatBytes(user.storageUsed || 0)} of ${formatBytes(user.storageLimit || 0)}` : "Loading..."}
-              </span>
+        <div className="border-t border-border">
+          <div className="p-6 space-y-4">
+            <div className="space-y-3">
+              <div className="flex justify-between text-sm">
+                <span className="text-foreground">Storage</span>
+                <span className="text-muted-foreground" data-testid="text-storage-used">
+                  {user ? `${formatBytes(user.storageUsed || 0)} of ${formatBytes(user.storageLimit || 0)}` : "Loading..."}
+                </span>
+              </div>
+              <Progress value={storagePercentage} className="h-2" data-testid="progress-storage" />
             </div>
-            <Progress value={storagePercentage} className="h-2" data-testid="progress-storage" />
           </div>
           
           {/* Upgrade Plan Button */}
-          <Link href="/subscription">
-            <Button 
-              className="w-full bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-white border-0 shadow-lg"
-              onClick={() => onClose()}
-              data-testid="button-upgrade-plan"
-            >
-              <Zap className="h-4 w-4 mr-2" />
-              Upgrade Plan
-            </Button>
-          </Link>
+          <div className="p-6 pt-0">
+            <Link href="/subscription">
+              <Button 
+                className="w-full bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70 text-white border-0 shadow-lg"
+                onClick={() => onClose()}
+                data-testid="button-upgrade-plan"
+              >
+                <Zap className="h-4 w-4 mr-2" />
+                Upgrade Plan
+              </Button>
+            </Link>
+          </div>
         </div>
       </aside>
     </>
