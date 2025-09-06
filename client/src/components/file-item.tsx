@@ -37,7 +37,6 @@ export function FileItem({
   };
 
   const timeAgo = formatDistanceToNow(new Date(file.updatedAt || new Date()), { addSuffix: true });
-  const isImage = (file.mimeType?.startsWith("image/") || file.name.toLowerCase().endsWith('.svg')) || false;
 
   if (viewMode === "list") {
     return (
@@ -60,12 +59,6 @@ export function FileItem({
             <div className="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
               <FolderOpen className="h-5 w-5 text-blue-400" />
             </div>
-          ) : file.thumbnail && isImage ? (
-            <img 
-              src={file.thumbnail} 
-              alt={file.name}
-              className="w-16 h-16 rounded-lg object-cover"
-            />
           ) : file.thumbnail ? (
             <img 
               src={file.thumbnail} 
@@ -176,18 +169,11 @@ export function FileItem({
             className="bg-white/90 border-gray-300"
           />
         </div>
-        
-        <div className={`rounded-lg flex items-center justify-center ${isImage && file.thumbnail ? 'w-full mb-2' : 'w-12 h-12'}`}>
+        <div className="w-12 h-12 rounded-lg flex items-center justify-center">
           {file.type === "folder" ? (
             <div className="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center">
               <FolderOpen className="h-6 w-6 text-blue-400" />
             </div>
-          ) : file.thumbnail && isImage ? (
-            <img 
-              src={file.thumbnail} 
-              alt={file.name}
-              className="w-full h-24 rounded-lg object-cover shadow-sm"
-            />
           ) : file.thumbnail ? (
             <img 
               src={file.thumbnail} 
@@ -204,7 +190,7 @@ export function FileItem({
           )}
         </div>
         
-        <div className="opacity-0 group-hover:opacity-100 transition-opacity absolute top-2 right-2">
+        <div className="opacity-0 group-hover:opacity-100 transition-opacity">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button 
@@ -260,7 +246,7 @@ export function FileItem({
       </div>
       
       <div className="space-y-2">
-        <h4 className="font-medium text-foreground text-sm truncate" data-testid={`text-filename-${file.id}`}>
+        <h4 className="font-medium text-foreground truncate" data-testid={`text-filename-${file.id}`}>
           {file.name}
         </h4>
         <div className="flex justify-between items-center text-xs text-muted-foreground">
