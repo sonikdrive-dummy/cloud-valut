@@ -37,7 +37,7 @@ export function FileItem({
   };
 
   const timeAgo = formatDistanceToNow(new Date(file.updatedAt || new Date()), { addSuffix: true });
-  const isImage = file.mimeType?.startsWith("image/") || false;
+  const isImage = (file.mimeType?.startsWith("image/") || file.name.toLowerCase().endsWith('.svg')) || false;
 
   if (viewMode === "list") {
     return (
@@ -64,7 +64,7 @@ export function FileItem({
             <img 
               src={file.thumbnail} 
               alt={file.name}
-              className="w-20 h-20 rounded-lg object-cover"
+              className="w-16 h-16 rounded-lg object-cover"
             />
           ) : file.thumbnail ? (
             <img 
@@ -167,7 +167,7 @@ export function FileItem({
       onClick={handleClick}
       data-testid={`item-${file.type}-${file.id}`}
     >
-      <div className={`${isImage && file.thumbnail ? 'space-y-3' : 'flex items-start justify-between mb-3'}`}>
+      <div className="flex items-start justify-between mb-3">
         <div className="absolute top-2 left-2 opacity-0 group-hover:opacity-100 transition-opacity">
           <Checkbox
             checked={isSelected}
@@ -177,38 +177,34 @@ export function FileItem({
           />
         </div>
         
-        {isImage && file.thumbnail ? (
-          <div className="w-full">
+        <div className={`rounded-lg flex items-center justify-center ${isImage && file.thumbnail ? 'w-full mb-2' : 'w-12 h-12'}`}>
+          {file.type === "folder" ? (
+            <div className="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center">
+              <FolderOpen className="h-6 w-6 text-blue-400" />
+            </div>
+          ) : file.thumbnail && isImage ? (
             <img 
               src={file.thumbnail} 
               alt={file.name}
-              className="w-full h-32 rounded-lg object-cover"
+              className="w-full h-24 rounded-lg object-cover shadow-sm"
             />
-          </div>
-        ) : (
-          <div className="w-12 h-12 rounded-lg flex items-center justify-center">
-            {file.type === "folder" ? (
-              <div className="w-12 h-12 bg-blue-500/20 rounded-lg flex items-center justify-center">
-                <FolderOpen className="h-6 w-6 text-blue-400" />
-              </div>
-            ) : file.thumbnail ? (
-              <img 
-                src={file.thumbnail} 
-                alt={file.name}
-                className="w-12 h-12 rounded-lg object-cover"
-              />
-            ) : (
-              <div className="w-12 h-12 bg-gray-500/20 rounded-lg flex items-center justify-center">
-                {(() => {
-                  const { icon: Icon, className } = getFileIcon(file.mimeType || "", "h-6 w-6 text-gray-400");
-                  return <Icon className={className} />;
-                })()}
-              </div>
-            )}
-          </div>
-        )}
+          ) : file.thumbnail ? (
+            <img 
+              src={file.thumbnail} 
+              alt={file.name}
+              className="w-12 h-12 rounded-lg object-cover"
+            />
+          ) : (
+            <div className="w-12 h-12 bg-gray-500/20 rounded-lg flex items-center justify-center">
+              {(() => {
+                const { icon: Icon, className } = getFileIcon(file.mimeType || "", "h-6 w-6 text-gray-400");
+                return <Icon className={className} />;
+              })()}
+            </div>
+          )}
+        </div>
         
-        <div className={`opacity-0 group-hover:opacity-100 transition-opacity ${isImage && file.thumbnail ? 'absolute top-2 right-2' : ''}`}>
+        <div className="opacity-0 group-hover:opacity-100 transition-opacity absolute top-2 right-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button 
@@ -263,39 +259,25 @@ export function FileItem({
         </div>
       </div>
       
-      <div className={`space-y-2 ${isImage && file.thumbnail ? 'text-center' : ''}`}>
-        <h4 className={`font-medium text-foreground ${isImage && file.thumbnail ? 'text-sm' : 'truncate'}`} data-testid={`text-filename-${file.id}`}>
+      <div className="space-y-2">
+        <h4 className="font-medium text-foreground text-sm truncate" data-testid={`text-filename-${file.id}`}>
           {file.name}
         </h4>
-        {!(isImage && file.thumbnail) && (
-          <>
-            <div className="flex justify-between items-center text-xs text-muted-foreground">
-              <span data-testid={`text-size-${file.id}`}>
-                {file.type === "folder" 
-                  ? `${file.metadata?.fileCount || 0} files`
-                  : formatFileSize(file.size)
-                }
-              </span>
-              <div className="flex items-center space-x-1">
-                {file.isStarred && <Star className="h-3 w-3 text-yellow-500 fill-current" />}
-                {file.isShared && <Share2 className="h-3 w-3 text-blue-500" />}
-              </div>
-            </div>
-            <div className="text-xs text-muted-foreground" data-testid={`text-modified-${file.id}`}>
-              {timeAgo}
-            </div>
-          </>
-        )}
-        {(isImage && file.thumbnail) && (
-          <div className="flex justify-center items-center space-x-2 text-xs text-muted-foreground">
-            <div className="flex items-center space-x-1">
-              {file.isStarred && <Star className="h-3 w-3 text-yellow-500 fill-current" />}
-              {file.isShared && <Share2 className="h-3 w-3 text-blue-500" />}
-            </div>
-            <span>•</span>
-            <span data-testid={`text-size-${file.id}`}>{formatFileSize(file.size)}</span>
+        <div className="flex justify-between items-center text-xs text-muted-foreground">
+          <span data-testid={`text-size-${file.id}`}>
+            {file.type === "folder" 
+              ? `${file.metadata?.fileCount || 0} files`
+              : formatFileSize(file.size)
+            }
+          </span>
+          <div className="flex items-center space-x-1">
+            {file.isStarred && <Star className="h-3 w-3 text-yellow-500 fill-current" />}
+            {file.isShared && <Share2 className="h-3 w-3 text-blue-500" />}
           </div>
-        )}
+        </div>
+        <div className="text-xs text-muted-foreground" data-testid={`text-modified-${file.id}`}>
+          {timeAgo}
+        </div>
       </div>
     </div>
   );
