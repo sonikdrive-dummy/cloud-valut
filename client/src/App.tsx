@@ -4,6 +4,7 @@ import { QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { ThemeProvider } from "@/components/theme-provider";
+import { UploadProgress } from "@/components/upload-progress";
 import NotFound from "@/pages/not-found";
 import FilesPage from "@/pages/files";
 import ProfilePage from "@/pages/profile";
@@ -40,6 +41,7 @@ function App() {
         <TooltipProvider>
           <Toaster />
           <Router />
+          <UploadProgress />
         </TooltipProvider>
       </ThemeProvider>
     </QueryClientProvider>
